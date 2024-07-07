@@ -56,7 +56,7 @@ jobs:
     - name: Deploy to staging
       run: |
         # ssh user@staging-server << 'EOF'
-        docker pull zeeshankhan299/php-apache-app:latest
-        docker pull zeeshankhan299/mysql:latest
+        # docker pull zeeshankhan299/php-apache-app:latest
+        # docker pull zeeshankhan299/mysql:latest
         # docker-compose -f docker-compose.yml up -d
         EOF
