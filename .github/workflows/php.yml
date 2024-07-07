@@ -1,0 +1,68 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+
+    - name: Validate PHP syntax
+      run: |
+        find php/src -name "*.php" -print0 | xargs -0 -n1 php -l
+
+    - name: Run PHPUnit tests
+      run: |
+        composer install
+        vendor/bin/phpunit --configuration phpunit.xml
+
+  build-and-push-docker:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker images
+      run: |
+        docker build -t my-docker-hub-username/php-apache-app:latest -f php/Dockerfile ./php
+        docker build -t my-docker-hub-username/mysql:latest -f mysql/Dockerfile ./mysql
+
+    - name: Push Docker images
+      run: |
+        docker push my-docker-hub-username/php-apache-app:latest
+        docker push my-docker-hub-username/mysql:latest
+
+  deploy-to-staging:
+    runs-on: ubuntu-latest
+    needs: build-and-push-docker
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to staging
+      run: |
+        ssh user@staging-server << 'EOF'
+        docker pull my-docker-hub-username/php-apache-app:latest
+        docker pull my-docker-hub-username/mysql:latest
+        docker-compose -f /path/to/your/docker-compose.yml up -d
+        EOF
