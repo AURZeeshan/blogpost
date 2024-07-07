@@ -44,8 +44,8 @@ jobs:
 
     - name: Push Docker images
       run: |
-        docker push my-docker-hub-username/php-apache-app:latest
-        docker push my-docker-hub-username/mysql:latest
+        docker push zeeshankhan299/php-apache-app:latest
+        docker push zeeshankhan299/mysql:latest
 
   # deploy-to-staging:
   #   runs-on: ubuntu-latest
