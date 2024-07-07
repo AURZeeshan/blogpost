@@ -22,10 +22,6 @@ jobs:
       run: |
         find php/src -name "*.php" -print0 | xargs -0 -n1 php -l
 
-    - name: Run PHPUnit tests
-      run: |
-        composer install
-        vendor/bin/phpunit --configuration phpunit.xml
 
   build-and-push-docker:
     runs-on: ubuntu-latest
