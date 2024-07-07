@@ -39,8 +39,8 @@ jobs:
 
     - name: Build Docker images
       run: |
-        docker build -t my-docker-hub-username/php-apache-app:latest -f php/Dockerfile ./php
-        docker build -t my-docker-hub-username/mysql:latest -f mysql/Dockerfile ./mysql
+        docker build -t zeeshankhan299/php-apache-app:latest -f php/Dockerfile ./php
+        docker build -t zeeshankhan299/mysql:latest -f mysql/Dockerfile ./mysql
 
     - name: Push Docker images
       run: |
