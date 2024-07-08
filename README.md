@@ -10,5 +10,6 @@
    docker-compose up -d
 
 PHP application: http://localhost:8000
+
 phpMyAdmin: http://localhost:8081
 
